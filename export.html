@@ -99,12 +99,13 @@
       const notation = params.get("notation") || alg;
       const puzzle = params.get("puzzle") || "3x3x3";
       // Vitesses paramétrables
-      const speedFast = parseFloat(params.get("speedFast") || "1.5"); // lecture 1
-      const speedSlow = parseFloat(params.get("speedSlow") || "1.0"); // lecture 2
+      const speed1 = parseFloat(params.get("speed1") || "1.5"); // lecture 1
+      const speedSetup = parseFloat(params.get("speedSetup") || "3.0"); // setup/reverse
+      const speed2 = parseFloat(params.get("speed2") || "1.0"); // lecture 2
       const repeats = 1; // on force 1
-      const bg = "#0e0f12";
+      const bgParam = params.get("bg") || "";
       const bgImage = "";
-      const bgVideo = "/fond.mp4"; // vidéo de fond
+      const bgVideo = ""; // désactivé
 
       function resolveAsset(pathOrUrl) {
         if (!pathOrUrl) return pathOrUrl;
@@ -135,11 +136,17 @@
         }
       }
 
-      // Config fond - couleur aléatoire
-      const randomHue = Math.floor(Math.random() * 360);
-      const randomColor = `hsl(${randomHue}, 70%, 50%)`;
-      bgEl.style.background = randomColor;
-      console.log("Fond couleur aléatoire:", randomColor);
+      // Config fond - couleur paramétrable ou aléatoire
+      let bgColor;
+      if (bgParam) {
+        bgColor = bgParam;
+        console.log("Fond couleur choisie:", bgColor);
+      } else {
+        const randomHue = Math.floor(Math.random() * 360);
+        bgColor = `hsl(${randomHue}, 70%, 50%)`;
+        console.log("Fond couleur aléatoire:", bgColor);
+      }
+      bgEl.style.background = bgColor;
 
       // Config overlays
       nameEl.textContent = (name || "").trim();
@@ -209,16 +216,16 @@
           // Overlays visibles dès le début
           ovl.classList.add("visible");
           // Lecture 1: alg complet depuis état brouillé
-          console.log("=== Lecture 1 ===");
-          await playOnce(speedFast, normalizedAlg, inv);
+          console.log(`=== Lecture 1 (x${speed1}) ===`);
+          await playOnce(speed1, normalizedAlg, inv);
           console.log("=== Lecture 1 terminée ===");
-          // Reset: jouer l'inverse depuis l'état résolu (pas de setup) en x2.5
-          console.log("=== Reverse pour reset (x2.5) ===");
-          await playOnce(3, inverse(normalizedAlg), "");
+          // Reset: jouer l'inverse depuis l'état résolu (pas de setup)
+          console.log(`=== Reverse pour reset (x${speedSetup}) ===`);
+          await playOnce(speedSetup, inverse(normalizedAlg), "");
           console.log("=== Reverse terminé ===");
           // Lecture 2: alg complet depuis état brouillé
-          console.log("=== Lecture 2 ===");
-          await playOnce(speedSlow, normalizedAlg, inv);
+          console.log(`=== Lecture 2 (x${speed2}) ===`);
+          await playOnce(speed2, normalizedAlg, inv);
           console.log("=== Lecture 2 terminée ===");
           // Marge finale pour capturer les dernières frames
           await new Promise((r) => setTimeout(r, 800));
