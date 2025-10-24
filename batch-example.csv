@@ -1,0 +1,5 @@
+name,alg,notation,puzzle,speedFast,speedSlow,repeats,bg,bgImage,out
+Sexy Move,R U R' U',R U R' U',3x3x3,2.6,0.65,3,#0e0f12,,out/Sexy_Move.mp4
+T-Perm,R U R' U' R' F R2 U' R' U' R U R' F',T-Perm,3x3x3,2.4,0.6,2,#1a1b1e,,out/T_Perm.mp4
+Sune,R U R' U R U2 R',Sune,3x3x3,2.8,0.7,3,#0e0f12,,out/Sune.mp4
+

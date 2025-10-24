@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Twisty Export - Aperçu</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #0e0f12;
+        color: #fff;
+        padding: 2rem;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+      }
+      h1 {
+        grid-column: 1 / -1;
+        margin-bottom: 1rem;
+      }
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      label {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        font-size: 0.9rem;
+      }
+      input,
+      select,
+      textarea {
+        padding: 0.5rem;
+        border: 1px solid #333;
+        background: #1a1b1e;
+        color: #fff;
+        border-radius: 4px;
+        font-family: inherit;
+      }
+      textarea {
+        font-family: "Courier New", monospace;
+        min-height: 100px;
+        resize: vertical;
+      }
+      button {
+        padding: 0.75rem 1.5rem;
+        background: #3b82f6;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      button:hover {
+        background: #2563eb;
+      }
+      .preview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      twisty-player {
+        width: 400px;
+        height: 400px;
+      }
+      .status {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+      }
+      .status.error {
+        background: #dc2626;
+      }
+      .status.success {
+        background: #16a34a;
+      }
+      .command {
+        grid-column: 1 / -1;
+        background: #1a1b1e;
+        padding: 1rem;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Twisty Export - Aperçu</h1>
+
+      <div class="controls">
+        <label>
+          Algorithme
+          <textarea id="alg">R U R' U'</textarea>
+        </label>
+
+        <label>
+          Nom
+          <input type="text" id="name" value="Sexy Move" />
+        </label>
+
+        <label>
+          Notation affichée
+          <input
+            type="text"
+            id="notation"
+            placeholder="Laissez vide pour utiliser l'algo"
+          />
+        </label>
+
+        <label>
+          Puzzle
+          <select id="puzzle">
+            <option value="3x3x3">3x3x3</option>
+            <option value="2x2x2">2x2x2</option>
+            <option value="4x4x4">4x4x4</option>
+            <option value="5x5x5">5x5x5</option>
+            <option value="pyraminx">Pyraminx</option>
+            <option value="megaminx">Megaminx</option>
+            <option value="skewb">Skewb</option>
+            <option value="square1">Square-1</option>
+          </select>
+        </label>
+
+        <label>
+          Vitesse (prévisualisation)
+          <input
+            type="range"
+            id="speed"
+            min="0.1"
+            max="5"
+            step="0.1"
+            value="1"
+          />
+          <span id="speedValue">1.0</span>
+        </label>
+
+        <label>
+          Couleur de fond
+          <input type="color" id="bg" value="#0e0f12" />
+        </label>
+
+        <button id="updateBtn">Mettre à jour</button>
+
+        <div id="status"></div>
+      </div>
+
+      <div class="preview">
+        <twisty-player id="player"></twisty-player>
+        <button id="playBtn">Jouer</button>
+      </div>
+
+      <div class="command" id="command">
+        <div style="margin-bottom: 0.5rem; opacity: 0.7">
+          Commande d'export:
+        </div>
+        <div id="commandText"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import "https://cdn.cubing.net/v0/js/cubing/twisty";
+      import { Alg } from "https://cdn.cubing.net/v0/js/cubing/alg";
+
+      const els = {
+        alg: document.getElementById("alg"),
+        name: document.getElementById("name"),
+        notation: document.getElementById("notation"),
+        puzzle: document.getElementById("puzzle"),
+        speed: document.getElementById("speed"),
+        speedValue: document.getElementById("speedValue"),
+        bg: document.getElementById("bg"),
+        updateBtn: document.getElementById("updateBtn"),
+        playBtn: document.getElementById("playBtn"),
+        player: document.getElementById("player"),
+        status: document.getElementById("status"),
+        commandText: document.getElementById("commandText"),
+      };
+
+      function normalize(str) {
+        return str.replace(/'/g, "'");
+      }
+
+      function showStatus(msg, type) {
+        els.status.textContent = msg;
+        els.status.className = `status ${type}`;
+        setTimeout(() => {
+          els.status.textContent = "";
+          els.status.className = "status";
+        }, 3000);
+      }
+
+      function updateCommand() {
+        const alg = normalize(els.alg.value.trim());
+        const name = els.name.value.trim();
+        const notation = els.notation.value.trim() || alg;
+        const puzzle = els.puzzle.value;
+        const bg = els.bg.value;
+
+        const cmd = `npm run export -- --alg="${alg}" --name="${name}" --notation="${notation}" --puzzle="${puzzle}" --bg="${bg}" --speedFast=2.6 --speedSlow=0.65 --repeats=3 --out="out/${name.replace(
+          /\s+/g,
+          "_"
+        )}.mp4"`;
+        els.commandText.textContent = cmd;
+      }
+
+      function update() {
+        const algValue = normalize(els.alg.value.trim());
+
+        try {
+          new Alg(algValue);
+
+          els.player.alg = algValue;
+          els.player.puzzle = els.puzzle.value;
+          els.player.tempoScale = parseFloat(els.speed.value);
+          els.player.visualization = "3D";
+          els.player.background = "none";
+          els.player.controlPanel = "bottom-row";
+
+          const params = new URLSearchParams({
+            alg: algValue,
+            puzzle: els.puzzle.value,
+          });
+          window.history.replaceState({}, "", `?${params}`);
+
+          updateCommand();
+          showStatus("Algorithme valide ✓", "success");
+        } catch (e) {
+          showStatus("Erreur: " + e.message, "error");
+        }
+      }
+
+      els.speed.addEventListener("input", () => {
+        els.speedValue.textContent = parseFloat(els.speed.value).toFixed(1);
+        els.player.tempoScale = parseFloat(els.speed.value);
+      });
+
+      els.updateBtn.addEventListener("click", update);
+      els.playBtn.addEventListener("click", () => els.player.play());
+      els.alg.addEventListener("input", updateCommand);
+      els.name.addEventListener("input", updateCommand);
+      els.notation.addEventListener("input", updateCommand);
+      els.puzzle.addEventListener("change", updateCommand);
+      els.bg.addEventListener("change", updateCommand);
+
+      // Charger depuis l'URL
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("alg")) {
+        els.alg.value = params.get("alg");
+      }
+      if (params.has("puzzle")) {
+        els.puzzle.value = params.get("puzzle");
+      }
+
+      update();
+    </script>
+  </body>
+</html>
