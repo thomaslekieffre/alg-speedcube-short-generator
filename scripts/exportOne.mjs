@@ -119,10 +119,10 @@ async function main() {
   const name = getOpt(args, "name", "");
   const notation = getOpt(args, "notation", alg);
   const puzzle = getOpt(args, "puzzle", "3x3x3");
-  const speedFast = getOpt(args, "speedFast", "2.6");
-  const speedSlow = getOpt(args, "speedSlow", "0.65");
-  const repeats = getOpt(args, "repeats", "3");
-  const bg = getOpt(args, "bg", "#0e0f12");
+  const speed1 = getOpt(args, "speed1", "1.5");
+  const speedSetup = getOpt(args, "speedSetup", "3.0");
+  const speed2 = getOpt(args, "speed2", "1.0");
+  const bg = getOpt(args, "bg", "");
   const bgImage = getOpt(args, "bgImage", "");
   let bgVideo = getOpt(args, "bgVideo", "");
   if (!bgVideo && existsSync("public/fond.mp4")) {
@@ -132,6 +132,10 @@ async function main() {
   const trimStartOpt = getOpt(args, "trimStart", "auto");
   let trimStartSec = 0;
   const tailPadMs = parseInt(getOpt(args, "tailPad", "3000"), 10);
+  const showFlash = getOpt(args, "showFlash", "1");
+  const showGlow = getOpt(args, "showGlow", "1");
+  const showSpeed = getOpt(args, "showSpeed", "1");
+  const showMoves = getOpt(args, "showMoves", "1");
 
   console.log("🎬 Export vidéo Twisty");
   console.log("Algo:", alg);
@@ -155,10 +159,14 @@ async function main() {
     name,
     notation,
     puzzle,
-    speedFast,
-    speedSlow,
-    repeats,
+    speed1,
+    speedSetup,
+    speed2,
     bg,
+    showFlash,
+    showGlow,
+    showSpeed,
+    showMoves,
   });
   if (bgImage) params.set("bgImage", bgImage);
   if (bgVideo) params.set("bgVideo", bgVideo);
@@ -189,6 +197,10 @@ async function main() {
       "--disable-renderer-backgrounding",
       "--disable-backgrounding-occluded-windows",
       "--disable-features=CalculateNativeWinOcclusion",
+      // Forcer framerate stable et désactiver VSync throttling
+      "--disable-frame-rate-limit",
+      "--disable-gpu-vsync",
+      "--max-gum-fps=60",
     ];
     if (headless) chromeArgs.unshift("--headless=new");
     browser = await chromium.launch({ headless, args: chromeArgs });
@@ -199,6 +211,7 @@ async function main() {
         dir: tmpDir,
         size: { width: 1080, height: 1920 },
       },
+      deviceScaleFactor: 1, // évite le suréchantillonnage
     });
 
     page = await context.newPage();

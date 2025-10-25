@@ -176,15 +176,50 @@
         height: 300px;
         margin: 0 auto;
       }
+      .info-box {
+        background: #fff9e6;
+        border-left: 4px solid #fbbf24;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1.5rem;
+        font-size: 0.85rem;
+        color: #555;
+        line-height: 1.6;
+      }
+      .info-box strong {
+        color: #d97706;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h1>🎬 Twisty Export</h1>
       <p class="subtitle">
-        Générateur de vidéos de cubes Rubik - Configurez et générez votre
-        commande d'export
+        Générateur de vidéos verticales (1080x1920) pour cubes Rubik avec
+        animations dynamiques
       </p>
+
+      <div
+        style="
+          background: #f0f4ff;
+          padding: 1rem;
+          border-radius: 8px;
+          margin-bottom: 2rem;
+          border-left: 4px solid #667eea;
+        "
+      >
+        <div style="font-weight: 600; color: #667eea; margin-bottom: 0.5rem">
+          📋 Séquence de la vidéo
+        </div>
+        <div style="font-size: 0.85rem; color: #555; line-height: 1.6">
+          1️⃣ <strong>Lecture 1</strong> : L'algorithme joué à vitesse normale
+          (avec nom + notation)<br />
+          ♻️ <strong>SETUP</strong> : L'inverse joué rapidement pour
+          réinitialiser (avec "SETUP" affiché)<br />
+          2️⃣ <strong>Lecture 2</strong> : L'algorithme rejoué plus lentement
+          (avec nom + notation)
+        </div>
+      </div>
 
       <div class="form-grid">
         <div class="form-group">
@@ -239,11 +274,18 @@ R U R' U' M' U R U' R' M</textarea
           <div class="form-group">
             <label>
               Couleur de fond
-              <span class="label-desc">(aléatoire si vide)</span>
+              <span class="label-desc"
+                >(gradient animé - aléatoire si vide)</span
+              >
             </label>
             <div class="color-input-wrapper">
-              <input type="color" id="bgColor" value="#ff6b6b" />
-              <input type="text" id="bgHex" value="#ff6b6b" />
+              <input type="color" id="bgColor" value="#667eea" />
+              <input
+                type="text"
+                id="bgHex"
+                value="#667eea"
+                placeholder="#667eea"
+              />
             </div>
           </div>
         </div>
@@ -251,10 +293,23 @@ R U R' U' M' U R U' R' M</textarea
         <div class="form-group">
           <label>
             Vitesses d'animation
-            <span class="label-desc">(multiplie la vitesse normale)</span>
+            <span class="label-desc"
+              >(multiplie la vitesse normale - défauts: 1.5 / 3.0 / 1.0)</span
+            >
           </label>
           <div class="row three-cols">
             <div>
+              <label
+                style="
+                  font-size: 0.75rem;
+                  color: #667eea;
+                  font-weight: 600;
+                  margin-bottom: 0.25rem;
+                  display: block;
+                "
+              >
+                1️⃣ Lecture 1
+              </label>
               <input
                 type="number"
                 id="speed1"
@@ -262,13 +317,21 @@ R U R' U' M' U R U' R' M</textarea
                 min="0.1"
                 max="10"
                 value="1.5"
-                placeholder="1ère lecture"
+                placeholder="1.5"
               />
-              <div style="font-size: 0.75rem; color: #666; margin-top: 0.25rem">
-                1ère lecture
-              </div>
             </div>
             <div>
+              <label
+                style="
+                  font-size: 0.75rem;
+                  color: #667eea;
+                  font-weight: 600;
+                  margin-bottom: 0.25rem;
+                  display: block;
+                "
+              >
+                ♻️ Setup (reverse)
+              </label>
               <input
                 type="number"
                 id="speedSetup"
@@ -276,13 +339,21 @@ R U R' U' M' U R U' R' M</textarea
                 min="0.1"
                 max="10"
                 value="3.0"
-                placeholder="Setup/reverse"
+                placeholder="3.0"
               />
-              <div style="font-size: 0.75rem; color: #666; margin-top: 0.25rem">
-                Setup (reverse)
-              </div>
             </div>
             <div>
+              <label
+                style="
+                  font-size: 0.75rem;
+                  color: #667eea;
+                  font-weight: 600;
+                  margin-bottom: 0.25rem;
+                  display: block;
+                "
+              >
+                2️⃣ Lecture 2
+              </label>
               <input
                 type="number"
                 id="speed2"
@@ -290,11 +361,8 @@ R U R' U' M' U R U' R' M</textarea
                 min="0.1"
                 max="10"
                 value="1.0"
-                placeholder="2ème lecture"
+                placeholder="1.0"
               />
-              <div style="font-size: 0.75rem; color: #666; margin-top: 0.25rem">
-                2ème lecture
-              </div>
             </div>
           </div>
         </div>
@@ -315,13 +383,15 @@ R U R' U' M' U R U' R' M</textarea
         <div class="form-group">
           <label>
             Effets et transitions
-            <span class="label-desc">(personnalise l'animation)</span>
+            <span class="label-desc"
+              >(active/désactive les animations visuelles)</span
+            >
           </label>
           <div
             style="
-              display: flex;
-              flex-wrap: wrap;
-              gap: 1rem;
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 0.75rem;
               margin-top: 0.5rem;
             "
           >
@@ -333,6 +403,9 @@ R U R' U' M' U R U' R' M</textarea
                 cursor: pointer;
                 font-weight: 400;
                 color: #333;
+                padding: 0.5rem;
+                background: #f9f9f9;
+                border-radius: 6px;
               "
             >
               <input type="checkbox" id="showFlash" checked />
@@ -346,10 +419,13 @@ R U R' U' M' U R U' R' M</textarea
                 cursor: pointer;
                 font-weight: 400;
                 color: #333;
+                padding: 0.5rem;
+                background: #f9f9f9;
+                border-radius: 6px;
               "
             >
               <input type="checkbox" id="showGlow" checked />
-              <span>💫 Glow sur SETUP</span>
+              <span>💫 Glow pulsant nom</span>
             </label>
             <label
               style="
@@ -359,10 +435,13 @@ R U R' U' M' U R U' R' M</textarea
                 cursor: pointer;
                 font-weight: 400;
                 color: #333;
+                padding: 0.5rem;
+                background: #f9f9f9;
+                border-radius: 6px;
               "
             >
               <input type="checkbox" id="showSpeed" checked />
-              <span>⚡ Indicateur vitesse</span>
+              <span>⚡ Badge vitesse</span>
             </label>
             <label
               style="
@@ -372,10 +451,13 @@ R U R' U' M' U R U' R' M</textarea
                 cursor: pointer;
                 font-weight: 400;
                 color: #333;
+                padding: 0.5rem;
+                background: #f9f9f9;
+                border-radius: 6px;
               "
             >
               <input type="checkbox" id="showMoves" checked />
-              <span>📊 Compteur mouvements</span>
+              <span>📊 Compteur temps réel</span>
             </label>
           </div>
         </div>
@@ -392,6 +474,16 @@ R U R' U' M' U R U' R' M</textarea
       <div class="preview">
         <h3>Aperçu du cube</h3>
         <twisty-player id="preview"></twisty-player>
+      </div>
+
+      <div class="info-box">
+        <strong>💡 Fonctionnalités actives :</strong><br />
+        • Fond gradient animé (3 couleurs harmonieuses basées sur votre
+        choix)<br />
+        • Transitions fluides avec slide et fade<br />
+        • Overlays stylés (pills blanches nom/notation)<br />
+        • Détection automatique du noir initial (trim intelligent)<br />
+        • Export MP4 H.264 yuv420p 30fps optimisé pour réseaux sociaux
       </div>
     </div>
 
