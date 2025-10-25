@@ -94,6 +94,12 @@
         padding: 2px;
         cursor: pointer;
       }
+      input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #667eea;
+      }
       .btn {
         padding: 1rem 2rem;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -305,6 +311,74 @@ R U R' U' M' U R U' R' M</textarea
             value="out/OLL_57.mp4"
           />
         </div>
+
+        <div class="form-group">
+          <label>
+            Effets et transitions
+            <span class="label-desc">(personnalise l'animation)</span>
+          </label>
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 1rem;
+              margin-top: 0.5rem;
+            "
+          >
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                cursor: pointer;
+                font-weight: 400;
+                color: #333;
+              "
+            >
+              <input type="checkbox" id="showFlash" checked />
+              <span>✨ Flash entre phases</span>
+            </label>
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                cursor: pointer;
+                font-weight: 400;
+                color: #333;
+              "
+            >
+              <input type="checkbox" id="showGlow" checked />
+              <span>💫 Glow sur SETUP</span>
+            </label>
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                cursor: pointer;
+                font-weight: 400;
+                color: #333;
+              "
+            >
+              <input type="checkbox" id="showSpeed" checked />
+              <span>⚡ Indicateur vitesse</span>
+            </label>
+            <label
+              style="
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                cursor: pointer;
+                font-weight: 400;
+                color: #333;
+              "
+            >
+              <input type="checkbox" id="showMoves" checked />
+              <span>📊 Compteur mouvements</span>
+            </label>
+          </div>
+        </div>
       </div>
 
       <button class="btn" id="generateBtn">🚀 Générer la commande</button>
@@ -335,6 +409,10 @@ R U R' U' M' U R U' R' M</textarea
         speedSetup: document.getElementById("speedSetup"),
         speed2: document.getElementById("speed2"),
         output: document.getElementById("output"),
+        showFlash: document.getElementById("showFlash"),
+        showGlow: document.getElementById("showGlow"),
+        showSpeed: document.getElementById("showSpeed"),
+        showMoves: document.getElementById("showMoves"),
         generateBtn: document.getElementById("generateBtn"),
         commandBox: document.getElementById("commandBox"),
         commandText: document.getElementById("commandText"),
@@ -375,13 +453,17 @@ R U R' U' M' U R U' R' M</textarea
         const speedSetup = els.speedSetup.value;
         const speed2 = els.speed2.value;
         const output = els.output.value.trim() || "out/export.mp4";
+        const showFlash = els.showFlash.checked ? "1" : "0";
+        const showGlow = els.showGlow.checked ? "1" : "0";
+        const showSpeed = els.showSpeed.checked ? "1" : "0";
+        const showMoves = els.showMoves.checked ? "1" : "0";
 
         if (!alg) {
           alert("L'algorithme est requis !");
           return;
         }
 
-        const cmd = `npm run export -- --alg="${alg}" --name="${name}" --notation="${notation}" --puzzle="${puzzle}" --bg="${bg}" --speed1=${speed1} --speedSetup=${speedSetup} --speed2=${speed2} --out="${output}"`;
+        const cmd = `npm run export -- --alg="${alg}" --name="${name}" --notation="${notation}" --puzzle="${puzzle}" --bg="${bg}" --speed1=${speed1} --speedSetup=${speedSetup} --speed2=${speed2} --showFlash=${showFlash} --showGlow=${showGlow} --showSpeed=${showSpeed} --showMoves=${showMoves} --out="${output}"`;
 
         els.commandText.textContent = cmd;
         els.commandBox.classList.add("show");

@@ -226,6 +226,11 @@
       const bgParam = params.get("bg") || "";
       const bgImage = "";
       const bgVideo = ""; // désactivé
+      // Options de transitions
+      const enableFlash = params.get("showFlash") === "1";
+      const enableGlow = params.get("showGlow") === "1";
+      const enableSpeed = params.get("showSpeed") === "1";
+      const enableMoves = params.get("showMoves") === "1";
 
       function resolveAsset(pathOrUrl) {
         if (!pathOrUrl) return pathOrUrl;
@@ -302,9 +307,14 @@
       nameEl.style.display = nameEl.textContent ? "inline-block" : "none";
       // La notation est toujours visible
       notationEl.style.display = "inline-block";
+      // Appliquer le glow si activé
+      if (enableGlow) {
+        nameEl.classList.add("glow");
+      }
 
       // Flash de transition
       async function flash() {
+        if (!enableFlash) return;
         flashEl.classList.add("active");
         await new Promise((r) => setTimeout(r, 400));
         flashEl.classList.remove("active");
@@ -317,11 +327,6 @@
         nameEl.textContent = newName;
         nameEl.classList.remove("slide-out");
         nameEl.classList.add("slide-in");
-        if (newName === "SETUP") {
-          nameEl.classList.add("glow");
-        } else {
-          nameEl.classList.remove("glow");
-        }
         await new Promise((r) => setTimeout(r, 600));
         nameEl.classList.remove("slide-in");
       }
@@ -369,9 +374,11 @@
         );
 
         // Afficher les indicateurs
-        if (showCounters) {
+        if (showCounters && enableSpeed) {
           updateSpeedIndicator(tempo);
           speedInd.classList.add("visible");
+        }
+        if (showCounters && enableMoves) {
           moveCounter.classList.add("visible");
         }
 
@@ -380,7 +387,7 @@
         console.log("Play() returned, attente de la fin réelle...");
 
         // Simuler le compteur de mouvements pendant l'animation
-        if (showCounters) {
+        if (showCounters && enableMoves) {
           const startTime = Date.now();
           const interval = setInterval(() => {
             const elapsed = Date.now() - startTime;
