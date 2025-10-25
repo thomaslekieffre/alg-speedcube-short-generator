@@ -1,3 +1,9 @@
+/**
+ * Twisty Export - Script d'export vidéo
+ * Copyright (c) 2025 Lekieffre Thomas (DrPepper)
+ * Tous droits réservés
+ */
+
 import { chromium } from "playwright";
 import { spawn } from "child_process";
 import { mkdir, unlink } from "fs/promises";

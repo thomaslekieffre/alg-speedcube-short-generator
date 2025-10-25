@@ -1,0 +1,6 @@
+name,alg,notation,puzzle,speed1,speedSetup,speed2,bg,out
+OLL 57,R U R' U' M' U R U' R' M,R U R' U' M' U R U' R' M,3x3x3,1.5,3.0,1.0,#667eea,out/OLL_57.mp4
+PBL 2,R U R U,R U R U,2x2x2,2.0,4.0,1.0,#28e6c0,out/PBL_2.mp4
+Sexy Move,R U R' U',R U R' U',3x3x3,1.5,3.0,1.0,#3b82f6,out/Sexy_Move.mp4
+T-Perm,R U R' U' R' F R2 U' R' U' R U R' F',T-Perm,3x3x3,1.2,3.5,0.8,#ec4899,out/T_Perm.mp4
+

@@ -1,3 +1,9 @@
+/**
+ * Twisty Export - Script d'export batch
+ * Copyright (c) 2025 Lekieffre Thomas (DrPepper)
+ * Tous droits réservés
+ */
+
 import { readFile } from "fs/promises";
 import { spawn } from "child_process";
 

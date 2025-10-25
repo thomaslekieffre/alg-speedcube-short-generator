@@ -232,4 +232,15 @@ twisty-export/
 
 ---
 
-Fait avec ❤️ par Lekieffre Thomas pour Neanto
+## 📜 Licence
+
+**IMPORTANT** : Les vidéos créées avec cet outil **ne peuvent pas être publiées** sans autorisation écrite de Lekieffre Thomas.
+
+Voir le fichier [LICENSE](LICENSE) pour les détails complets.
+
+Pour demander une autorisation de publication, contactez Lekieffre Thomas par mail : thomas.lekieffredev@gmail.com .
+
+---
+
+Fait avec ❤️ par Lekieffre Thomas pour Neanto  
+© 2025 - Tous droits réservés

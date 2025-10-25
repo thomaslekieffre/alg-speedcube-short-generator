@@ -1,6 +1,9 @@
 {
   "name": "twisty-export",
   "version": "1.0.0",
+  "description": "Générateur de vidéos verticales professionnelles pour cubes Rubik",
+  "author": "Lekieffre Thomas (DrPepper)",
+  "license": "PROPRIETARY",
   "type": "module",
   "scripts": {
     "dev": "vite",
